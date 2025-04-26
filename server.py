@@ -85,8 +85,6 @@ def gtm_collect():
         # Log the event data for debugging
         app.logger.info(f"GTM Collect: {json.dumps(payload)}")
         
-        # Process the event (you can add custom logic here)
-        
         # Return a success response (204 No Content is typical for tracking endpoints)
         return make_response('', 204)
     except Exception as e:
@@ -111,7 +109,6 @@ def gtm_debug():
     logouts = gtm.get_recent_events(event_type='user_logout', limit=10)
     all_events = gtm.get_recent_events(limit=20)
     
-    # You can customize this page with GTM debugging info
     debug_html = f"""
     <!DOCTYPE html>
     <html>

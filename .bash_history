@@ -47,3 +47,26 @@ lsof -i :5015
 bash restart_flask.sh 
 python3
 bash restart_flask.sh 
+ls
+git init
+git add .
+rm -rf .git
+git init
+venv
+env
+source gtm_venv/bin/activate && pip freeze > requirements.txt
+git init
+git add .
+git commit -m "initial commit"
+git config --global user.email "bhandari.hemanta.01@gmai.com"
+git config --global user.name "bluntblad3"
+git commit -m "initial commit"
+git remote add origin https://github.com/bluntblad3/server-side-tracking.git
+git branch -M main
+git push -u origin main
+/usr/bin/python3 /home/hemanta/.vscode-server/extensions/ms-python.python-2025.4.0-linux-x64/python_files/printEnvVariablesToFile.py /home/hemanta/.vscode-server/extensions/ms-python.python-2025.4.0-linux-x64/python_files/deactivate/bash/envVars.txt
+ls
+vim
+vim server.py
+vim .
+exit
