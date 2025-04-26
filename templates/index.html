@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}ShopEasy - Home{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Welcome to ShopEasy</h1>
+<p class="lead">Browse our latest products and find the best deals!</p>
+
+<div class="row">
+    {% for product in products %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            {% if product.image %}
+            <img src="{{ url_for('static', filename='images/' + product.image) }}" class="card-img-top" alt="{{ product.name }}">
+            {% else %}
+            <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" class="card-img-top" alt="Product placeholder">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">{{ product.description[:100] }}{% if product.description|length > 100 %}...{% endif %}</p>
+                <p class="card-text"><strong>${{ "%.2f"|format(product.price) }}</strong></p>
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('product', product_id=product.id) }}" class="btn btn-primary">View Details</a>
+                    {% if current_user.is_authenticated and product.stock > 0 %}
+                    <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-success">Add to Cart</button>
+                    </form>
+                    {% elif product.stock > 0 %}
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-primary">Login to Buy</a>
+                    {% else %}
+                    <button class="btn btn-secondary" disabled>Out of Stock</button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">Stock: {{ product.stock }} available</small>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            No products available at the moment. Please check back later.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

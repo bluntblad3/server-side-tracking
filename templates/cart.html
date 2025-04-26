@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart - ShopEasy{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Your Shopping Cart</h1>
+
+{% if cart_items %}
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center">
+                        {% if item.product.image %}
+                        <img src="{{ url_for('static', filename='images/' + item.product.image) }}" alt="{{ item.product.name }}" class="img-thumbnail me-3" style="width: 50px;">
+                        {% else %}
+                        <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" alt="Product placeholder" class="img-thumbnail me-3" style="width: 50px;">
+                        {% endif %}
+                        <a href="{{ url_for('product', product_id=item.product.id) }}">{{ item.product.name }}</a>
+                    </div>
+                </td>
+                <td>${{ "%.2f"|format(item.product.price) }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ "%.2f"|format(item.product.price * item.quantity) }}</td>
+                <td>
+                    <a href="{{ url_for('remove_from_cart', item_id=item.id) }}" class="btn btn-sm btn-danger">
+                        <i class="bi bi-trash"></i> Remove
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="table-active">
+                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                <td><strong>${{ "%.2f"|format(total) }}</strong></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div class="d-flex justify-content-between">
+    <a href="{{ url_for('home') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Continue Shopping
+    </a>
+    <a href="{{ url_for('checkout') }}" class="btn btn-success">
+        Proceed to Checkout <i class="bi bi-arrow-right"></i>
+    </a>
+</div>
+{% else %}
+<div class="alert alert-info">
+    <p>Your cart is empty. <a href="{{ url_for('home') }}">Continue shopping</a> to add items to your cart.</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+{% endblock %}

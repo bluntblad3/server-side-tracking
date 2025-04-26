@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - ShopEasy{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-5">
+        {% if product.image %}
+        <img src="{{ url_for('static', filename='images/' + product.image) }}" class="img-fluid rounded" alt="{{ product.name }}">
+        {% else %}
+        <img src="{{ url_for('static', filename='images/placeholder.jpg') }}" class="img-fluid rounded" alt="Product placeholder">
+        {% endif %}
+    </div>
+    <div class="col-md-7">
+        <h1>{{ product.name }}</h1>
+        <p class="lead">{{ product.description }}</p>
+        <p class="fs-3 text-primary">${{ "%.2f"|format(product.price) }}</p>
+        
+        <div class="mb-3">
+            <span class="badge {% if product.stock > 10 %}bg-success{% elif product.stock > 0 %}bg-warning{% else %}bg-danger{% endif %}">
+                {% if product.stock > 0 %}
+                In Stock: {{ product.stock }} available
+                {% else %}
+                Out of Stock
+                {% endif %}
+            </span>
+        </div>
+        
+        {% if current_user.is_authenticated and product.stock > 0 %}
+        <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post" class="mb-3">
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <label for="quantity" class="col-form-label">Quantity:</label>
+                </div>
+                <div class="col-auto">
+                    <input type="number" id="quantity" name="quantity" class="form-control" min="1" max="{{ product.stock }}" value="1">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-success">Add to Cart</button>
+                </div>
+            </div>
+        </form>
+        {% elif product.stock > 0 %}
+        <a href="{{ url_for('login') }}" class="btn btn-outline-primary">Login to Buy</a>
+        {% else %}
+        <button class="btn btn-secondary" disabled>Out of Stock</button>
+        {% endif %}
+        
+        <hr>
+        
+        <div class="mt-3">
+            <h4>Product Details</h4>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Product ID: {{ product.id }}</li>
+                <li class="list-group-item">Price: ${{ "%.2f"|format(product.price) }}</li>
+                <li class="list-group-item">Stock: {{ product.stock }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
